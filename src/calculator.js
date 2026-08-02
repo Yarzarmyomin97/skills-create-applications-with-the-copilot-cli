@@ -27,6 +27,26 @@ function toNumber(value) {
   return Number.isFinite(n) ? n : null;
 }
 
+// Pure arithmetic functions exported for unit testing
+function add(a, b) {
+  return a + b;
+}
+
+function subtract(a, b) {
+  return a - b;
+}
+
+function multiply(a, b) {
+  return a * b;
+}
+
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error('division by zero');
+  }
+  return a / b;
+}
+
 function main(argv) {
   const op = argv[2];
   const aRaw = argv[3];
@@ -50,20 +70,21 @@ function main(argv) {
 
   switch (op.toLowerCase()) {
     case 'add':
-      result = a + b;
+      result = add(a, b);
       break;
     case 'subtract':
-      result = a - b;
+      result = subtract(a, b);
       break;
     case 'multiply':
-      result = a * b;
+      result = multiply(a, b);
       break;
     case 'divide':
-      if (b === 0) {
+      try {
+        result = divide(a, b);
+      } catch (err) {
         console.error('Error: division by zero.');
         process.exit(1);
       }
-      result = a / b;
       break;
     default:
       console.error(`Error: unknown operation "${op}".`);
@@ -80,4 +101,4 @@ if (require.main === module) {
   main(process.argv);
 }
 
-module.exports = { main, toNumber };
+module.exports = { main, toNumber, add, subtract, multiply, divide };
